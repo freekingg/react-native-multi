@@ -8,6 +8,7 @@
     "web": "react-scripts start",
     "build:web": "react-scripts build",
     "start": "react-native start",
+    "eject": "react-scripts eject",
     "lint": "eslint ."
   },
   "dependencies": {

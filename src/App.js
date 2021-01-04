@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -14,9 +14,29 @@ import {
   View,
   Text,
   StatusBar,
+  DeviceEventEmitter,
+  NativeModules,
 } from 'react-native';
+import {scaleSize} from './ScreenUtil';
+import {PixelRatio} from 'react-native';
+const px2dp = px => PixelRatio.roundToNearestPixel(px);
 
 const App = () => {
+  const [count, setCount] = useState('tt');
+  useEffect(() => {
+    setTimeout(() => {
+      callNative();
+    }, 3000);
+    DeviceEventEmitter.addListener('EventName', function (msg) {
+      console.log('msg', msg);
+      // setCount(msg);
+    });
+  });
+
+  const callNative = () => {
+    NativeModules.MyModule.NativeMethod();
+  };
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -51,6 +71,9 @@ const App = () => {
                 Read the docs to discover what to do next:
               </Text>
             </View>
+            <View style={styles.demo}>
+              <Text>{count}</Text>
+            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -63,7 +86,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
   },
-
+  demo: {
+    backgroundColor: '#666',
+    width: scaleSize(750),
+  },
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
